@@ -5,6 +5,7 @@ import com.lhc.lhcusercenter.common.exception.enums.GlobalErrorCodeConstants;
 import com.lhc.lhcusercenter.common.pojo.Response;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.*;
+import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,7 @@ import java.nio.charset.StandardCharsets;
 @WebFilter(filterName = "WebFilter", urlPatterns = "/*")
 @Order(1)
 @Slf4j
-public class WebFilter implements Filter {
+public class RequestFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
@@ -39,11 +40,12 @@ public class WebFilter implements Filter {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String uri = request.getRequestURI();
         final String traceId = request.getHeader("traceId");
+        log.info("请求地址是 {} traceId {} ", uri, traceId);
         if (StringUtils.isEmpty(traceId)) {
             takeRsp(response, Response.error(GlobalErrorCodeConstants.TRACE_ID_NONE));
             return;
         }
-        log.info("请求地址是 {} traceId ", uri);
+
 //        Map<String, String[]> parameterMap = request.getParameterMap();
     }
 
@@ -53,7 +55,7 @@ public class WebFilter implements Filter {
     }
 
 
-    public void takeRsp(HttpServletResponse servletResponse, Response response) throws IOException {
+    public void takeRsp(HttpServletResponse servletResponse, Response<?> response) throws IOException {
         servletResponse.setCharacterEncoding("UTF-8");
         servletResponse.setContentType("application/json;charset=utf-8");
         servletResponse.setHeader("Content-Type", "application/json;charset=UTF-8");
