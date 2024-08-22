@@ -32,6 +32,11 @@
         <mybatis-plus-verison>3.5.7</mybatis-plus-verison>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.34.1</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>

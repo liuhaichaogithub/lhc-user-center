@@ -5,14 +5,14 @@ server:
 spring:
   datasource:
     dynamic:
-      primary: master #设置默认的数据源或者数据源组,默认值即为master
-      strict: false #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      primary: master
+      strict: false
       datasource:
         master:
           url: jdbc:mysql://10.0.8.13:3307/lhc_user_center
           username: root
           password: liu821290375
-          driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+          driver-class-name: com.mysql.cj.jdbc.Driver
         slave_1:
           url: jdbc:mysql://10.0.8.13:3307/lhc_user_center
           username: root
