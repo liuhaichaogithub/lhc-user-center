@@ -22,7 +22,7 @@ public class LoginController {
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
         final String code = lineCaptcha.getCode();
         final String imageBase64Data = lineCaptcha.getImageBase64Data();
-        log.info("验证码是{}", code);
+        log.info("验证码是{} imageBase64Data is {}", code, imageBase64Data);
         return Response.success(imageBase64Data);
     }
 }

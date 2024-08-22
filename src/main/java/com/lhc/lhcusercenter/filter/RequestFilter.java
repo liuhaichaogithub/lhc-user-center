@@ -36,7 +36,7 @@ public class RequestFilter implements Filter {
 
     }
 
-    private void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException {
+    private void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String uri = request.getRequestURI();
         final String traceId = request.getHeader("traceId");
@@ -47,6 +47,8 @@ public class RequestFilter implements Filter {
         }
 
 //        Map<String, String[]> parameterMap = request.getParameterMap();
+        chain.doFilter(request, response);
+        return;
     }
 
     @Override
