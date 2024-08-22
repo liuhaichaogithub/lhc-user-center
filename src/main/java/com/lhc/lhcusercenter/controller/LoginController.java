@@ -56,12 +56,4 @@ public class LoginController {
         return Response.success();
     }
 
-    public static void main(String[] args) {
-        final String gensalt = BCrypt.gensalt();
-        System.out.println(gensalt);
-        String pw_hash = BCrypt.hashpw("liu821290375", "$2a$10$EyUsJ2hvGDj5gmwFfeKnSe");
-//        $2a$10$EyUsJ2hvGDj5gmwFfeKnSeOk/hIH5mxw6jbvAXBKh6GSI7zeuA4UK
-        System.out.println(pw_hash);
-
-    }
 }
