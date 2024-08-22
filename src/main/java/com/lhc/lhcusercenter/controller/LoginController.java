@@ -5,11 +5,12 @@ import cn.hutool.captcha.LineCaptcha;
 import com.lhc.lhcusercenter.common.pojo.Response;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import net.sf.jsqlparser.statement.select.KSQLWindow;
 import org.redisson.api.RMapCache;
 import org.redisson.api.RedissonClient;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Author: 刘海潮
@@ -31,8 +32,8 @@ public class LoginController {
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
         final String code = lineCaptcha.getCode();
         final String imageBase64Data = lineCaptcha.getImageBase64Data();
-        log.info("验证码是{} imageBase64Data is {}", code, imageBase64Data);
-        mapCache.put(traceId, code, 60, java.util.concurrent.TimeUnit.SECONDS);
+        log.info("验证码是{} traceId is {}", code, traceId);
+        mapCache.put(traceId, code, 5, TimeUnit.MINUTES);
         return Response.success(imageBase64Data);
     }
 }
