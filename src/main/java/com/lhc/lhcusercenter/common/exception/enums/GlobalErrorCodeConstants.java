@@ -38,6 +38,7 @@ public interface GlobalErrorCodeConstants {
     ErrorCode REPEATED_REQUESTS = new ErrorCode(900, "重复请求，请稍后重试"); // 重复请求
     ErrorCode DEMO_DENY = new ErrorCode(901, "演示模式，禁止写操作");
     ErrorCode imageCodeError = new ErrorCode(902, "图形验证码错误");
+    ErrorCode userNameOrPasswordError = new ErrorCode(903, "用户名或密码错误");
 
     ErrorCode UNKNOWN = new ErrorCode(999, "未知错误");
 
