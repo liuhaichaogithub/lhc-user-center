@@ -39,7 +39,7 @@ public class LoginController {
     UserInfoService userInfoService;
 
     @GetMapping("/getImageCode")
-    public Response<?> pageVc(@RequestHeader(name = "traceId") String traceId) {
+    public Response<String> pageVc(@RequestHeader(name = "traceId") String traceId) {
         RMapCache<String, String> mapCache = redissonClient.getMapCache("user-center:imageCode");
         //定义图形验证码的长和宽
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
@@ -51,7 +51,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public Response<?> login(@RequestBody @Validated LoginReqDto loginReqDto) {
+    public Response<LoginRspDto> login(@RequestBody @Validated LoginReqDto loginReqDto) {
         RMapCache<String, String> mapCache = redissonClient.getMapCache("user-center:imageCode");
         final String imageCode = mapCache.get(loginReqDto.getImageCodeTraceId());
         if (StringUtil.isBlank(imageCode)) {
