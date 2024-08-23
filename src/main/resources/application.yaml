@@ -35,13 +35,9 @@ spring:
       password: liu821290375
 sa-token:
   token-name: token
-  #token 超时时间，默认30天
   timeout: 2592000
-  #token 活跃度，超过30分钟不活跃失效
   active-timeout: 1800
-  #支持同时登录
   is-concurrent: true
-  #同一个账号是否共用1个token
   is-share: false
   token-style: uuid
   is-log: true
