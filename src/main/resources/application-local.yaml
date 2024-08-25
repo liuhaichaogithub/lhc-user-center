@@ -9,7 +9,7 @@ spring:
       strict: false
       datasource:
         master:
-          url: jdbc:mysql://10.0.8.13:3307/lhc_user_center
+          url: jdbc:mysql://192.168.1.8:3307/lhc_user_center
           username: root
           password: liu821290375
           driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,7 +18,7 @@ spring:
   data:
     redis:
       database: 1
-      host: 10.0.8.13
+      host: 192.168.1.8
       port: 6380
       timeout: 10s
       lettuce:

@@ -1,6 +1,5 @@
 package com.lhc.lhcusercenter.controller;
 
-import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
@@ -14,6 +13,7 @@ import com.lhc.lhcusercenter.db.service.UserInfoService;
 import com.lhc.lhcusercenter.entity.req.LoginReqDto;
 import com.lhc.lhcusercenter.entity.rsp.LoginRspDto;
 import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import jodd.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RMapCache;
@@ -38,20 +38,20 @@ public class LoginController {
     @Resource
     UserInfoService userInfoService;
 
-    @GetMapping("/getImageCode")
-    public Response<String> pageVc(@RequestHeader(name = "traceId") String traceId) {
+    @GetMapping("/getImageCode/{imageCodeTraceId}")
+    public Response<String> pageVc(@PathVariable(name = "imageCodeTraceId") String imageCodeTraceId) {
         RMapCache<String, String> mapCache = redissonClient.getMapCache("user-center:imageCode");
         //定义图形验证码的长和宽
         LineCaptcha lineCaptcha = CaptchaUtil.createLineCaptcha(200, 100);
         final String code = lineCaptcha.getCode();
         final String imageBase64Data = lineCaptcha.getImageBase64Data();
-        log.info("验证码是{} traceId is {}", code, traceId);
-        mapCache.put(traceId, code, 5, TimeUnit.MINUTES);
+        log.info("验证码是{} imageCodeTraceId is {}", code, imageCodeTraceId);
+        mapCache.put(imageCodeTraceId, code, 5, TimeUnit.MINUTES);
         return Response.success(imageBase64Data);
     }
 
     @PostMapping("/login")
-    public Response<LoginRspDto> login(@RequestBody @Validated LoginReqDto loginReqDto) {
+    public Response<LoginRspDto> login(@RequestBody @Valid LoginReqDto loginReqDto) {
         RMapCache<String, String> mapCache = redissonClient.getMapCache("user-center:imageCode");
         final String imageCode = mapCache.get(loginReqDto.getImageCodeTraceId());
         if (StringUtil.isBlank(imageCode)) {
@@ -60,6 +60,8 @@ public class LoginController {
         if (!imageCode.equalsIgnoreCase(loginReqDto.getImageCode())) {
             return Response.error(GlobalErrorCodeConstants.imageCodeError);
         }
+        /*验证码校验通过，删除缓存*/
+        mapCache.remove(loginReqDto.getImageCodeTraceId());
         final UserInfo userInfo = userInfoService.getOne(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getLoginName, loginReqDto.getUsername()));
         if (null == userInfo) {
             return Response.error(GlobalErrorCodeConstants.userNameOrPasswordError);

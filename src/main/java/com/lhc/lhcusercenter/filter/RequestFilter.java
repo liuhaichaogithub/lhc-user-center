@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets;
  * Date: 2024/8/16 下午5:04
  */
 @WebFilter(filterName = "WebFilter", urlPatterns = "/*")
-@Order(1)
+//@Order(1)
 @Slf4j
 public class RequestFilter implements Filter {
     @Override
@@ -39,6 +39,10 @@ public class RequestFilter implements Filter {
     private void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         String uri = request.getRequestURI();
+        if(uri.equals("/error")){
+            chain.doFilter(request, response);
+            return;
+        }
         final String traceId = request.getHeader("traceId");
         log.info("请求地址是 {} traceId {} ", uri, traceId);
         if (StringUtils.isEmpty(traceId)) {
