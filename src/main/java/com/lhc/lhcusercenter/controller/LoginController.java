@@ -1,5 +1,6 @@
 package com.lhc.lhcusercenter.controller;
 
+import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
@@ -66,8 +67,8 @@ public class LoginController {
         if (null == userInfo) {
             return Response.error(GlobalErrorCodeConstants.userNameOrPasswordError);
         }
-        final String dbPass = SaSecureUtil.aesDecrypt(userInfo.getSalt(), loginReqDto.getPassword());
-        if (!dbPass.equals(userInfo.getPassword())) {
+        final String hashpw = BCrypt.hashpw(loginReqDto.getPassword(), userInfo.getSalt());
+        if (!hashpw.equals(userInfo.getPassword())) {
             return Response.error(GlobalErrorCodeConstants.userNameOrPasswordError);
         }
         StpUtil.login(userInfo.getId());
@@ -78,5 +79,11 @@ public class LoginController {
         loginRsp.setTokenName(tokenInfo.getTokenName());
         return Response.success(loginRsp);
     }
+    public static void main(String[] args) {
+        final String gensalt = BCrypt.gensalt();
+        System.out.println(gensalt);
+        String pw_hash = BCrypt.hashpw("liu821290375", "$2a$10$EyUsJ2hvGDj5gmwFfeKnSe");
+        System.out.println(pw_hash);
 
+    }
 }

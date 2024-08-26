@@ -23,7 +23,6 @@ import java.util.Map;
 @ResponseBody
 public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Response<?> handleAllExceptions(Exception ex) {
         log.error("1报错信息:", ex);
         // 记录日志，处理异常信息
@@ -31,7 +30,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public Response<?> methodArgumentNotValidException(MethodArgumentNotValidException ex) {
 //        log.error("报错信息:", ex);
         final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
